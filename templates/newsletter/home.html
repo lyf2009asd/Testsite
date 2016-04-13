@@ -1,0 +1,30 @@
+{% extends 'newsletter/base.html' %}
+{% load crispy_forms_tags %}
+{% block head_title %}Welcome | {% endblock %}
+ {% block jumbotron %}
+     <div class="jumbotron">
+     <div class="row">
+            <div class="col-sm6 col-md-10">
+
+                    <h1>My Opinion</h1>
+                    <p>I got say this thing is kind amazing</p>
+                    <p>
+                        <a class="btn btn-lg btn-primary" href="/accounts/register" role="button">Sign Up &raquo;</a>
+                    </p>
+
+            </div>
+     </div>
+     </div>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-3 col-md-3 pull-right">
+            <p class="lead">{{ title }}</p>
+            <form action="", method="POST">
+                {% csrf_token %}
+                {{ form | crispy }}
+                <input class="btn btn-primary" type="submit" value="Sign Up">
+            </form>
+   </div>
+</div>
+{% endblock %}
