@@ -1,9 +1,11 @@
 {% include "base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-<div class="col-sm-3 col-md-3">
+<div class="col-sm-6 col-md-offset-3">
+    <h1 class="text-center">Contact Me</h1>
     <form action="", method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form | crispy  }}
     <input class="btn btn-primary" type="submit" value="Submit">
     </form>
 </div>
