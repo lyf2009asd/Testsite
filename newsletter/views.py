@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .forms import SignUpForm,ContactForm
 from django.conf import settings
+from .models import SignUp
 # Create your views here.
 
 
@@ -11,8 +12,9 @@ def home(request):
         'title': title,
         'form': form,
     }
-    #if request.user.is_authenticated():
-        #title = "Sign Up Page %s" % request.user
+    # if request.user.is_authenticated() and request.user.is_staff:
+    #     print (SignUp.objects.all())
+
     #if request.method == "Post":
         #print request.POST
     if form.is_valid():

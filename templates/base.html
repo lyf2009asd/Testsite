@@ -12,14 +12,23 @@
 
     <title>{% block head_title %}{% endblock %}Test Site</title>
 
-    {% include 'newsletter/head_css.html' %}
+    {% include 'head_css.html' %}
 
 
   </head>
 
   <body>
     <!-- Static navbar -->
-    {% include 'newsletter/navbar.html' %}
+    {% include 'navbar.html' %}
+        {% if messages %}
+            <div class="message">
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
 
     <div class="container">
     {% block jumbotron %}
@@ -29,7 +38,7 @@
     </div>
     <!-- /container -->
 
-    {% include 'newsletter/js.html' %}
+    {% include 'js.html' %}
 
 
   </body>
