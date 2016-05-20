@@ -10,7 +10,7 @@ from django.db.models import Q
 
 
 def posts_create(request):
-    if not request.user.is_staff or not request.user.is_superuser:
+    if not request.user.is_staff or not request.user.is_superuser or not request.user.is_authenticated:
         raise Http404
     form = PostForm(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -60,7 +60,7 @@ def posts_list(request):
 
 
 def posts_update(request, id):
-    if not request.user.is_staff or not request.user.is_superuser:
+    if not request.user.is_staff or not request.user.is_superuser or not request.user.is_authenticated:
         raise Http404
     instance = get_object_or_404(Post, id=id)
     form = PostForm(request.POST or None,request.FILES or None, instance = instance)
