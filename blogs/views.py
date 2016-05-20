@@ -25,8 +25,8 @@ def posts_create(request):
     return render(request,"blogs/create.html", context)
 
 
-def posts_detail(request, id):
-    instance = get_object_or_404(Post, id=id)
+def posts_detail(request, slug=None):
+    instance = get_object_or_404(Post, slug=slug)
     share_string = quote_plus(instance.content)
     context = {
         "title": instance.title,
@@ -59,10 +59,10 @@ def posts_list(request):
     return render(request, "blogs/home.html", context)
 
 
-def posts_update(request, id):
+def posts_update(request, slug=None):
     if not request.user.is_authenticated :
         raise Http404
-    instance = get_object_or_404(Post, id=id)
+    instance = get_object_or_404(Post, slug=slug)
     form = PostForm(request.POST or None,request.FILES or None, instance = instance)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -77,10 +77,10 @@ def posts_update(request, id):
     return render(request, "blogs/create.html", context)
 
 
-def posts_delete(request, id):
+def posts_delete(request, slug=None):
     if not request.user.is_staff or not request.user.is_superuser:
         raise Http404
-    instance = get_object_or_404(Post, id=id)
-
+    instance = get_object_or_404(Post, slug=slug)
+    instance.delete()
     messages.success(request, "Successfully Deleted")
     return redirect("posts_list")

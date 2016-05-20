@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'newsletter',
+    #3rd party lib
     'crispy_forms',
+    'pagedown',
+    #my own app
     'blogs',
+    'newsletter',
 
 ]
 
