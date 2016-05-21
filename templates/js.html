@@ -14,9 +14,34 @@
                 var markedContent = marked(content);
                 $(this).html(markedContent);
             });
-            $(".content-markdown img").each(function(){
+            $(".post-it-self img").each(function(){
                     $(this).addClass("img-responsive");
-            })
+            });
+            //preview content
+            var contentInput = $("#id_content");
+            function setContent(value){
+                var markedContent = marked(value);
+                $("#previe-content").html(markedContent);
+                $("#previe-content img").each(function(){
+                    $(this).addClass("img-responsive");
+                });
+            }
+            setContent(contentInput.val());
+            contentInput.keyup(function(){
+                var newContent = $(this).val();
+                setContent(newContent)
+            });
+
+            //preview title
+            var titleInput = $("#id_title");
+            function setTitle(value){
+                $("#preview-title").text(value);
+            }
+            setTitle(titleInput.val());
+            titleInput.keyup(function(){
+                var newTitle = $(this).val();
+                setTitle(newTitle);
+            });
         });
     </script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

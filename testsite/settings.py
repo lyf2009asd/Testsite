@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     #3rd party lib
     'crispy_forms',
     'pagedown',
+    'markdown_deux',
     #my own app
     'blogs',
     'newsletter',
