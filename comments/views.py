@@ -1,14 +1,43 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Comment
 from .forms import CommentForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 # Create your views here.
 
 
+def comment_delete(request, id):
+    # obj = get_object_or_404(Comment, id=id)
+    try:
+        obj = Comment.objects.get(id=id)
+    except:
+        raise Http404
+    if obj.user != request.user or not request.user.is_superuser:
+        response = HttpResponse("You can't delete this since you're not the owner")
+        response.status_code = 403
+        return response
+    if request.method == "POST":
+        parent_obj_url = obj.content_object.get_absolute_url()
+        obj.delete()
+        messages.success(request, "Comment has been deleted")
+        return HttpResponseRedirect(parent_obj_url)
+    context = {
+        "object": obj,
+    }
+    return render(request, "comments/confirm_delete.html", context)
+
+
 def comment_thread(request, id):
-    obj = get_object_or_404(Comment, id=id)
+    # obj = get_object_or_404(Comment, id=id)
+    try:
+        obj = Comment.objects.get(id=id)
+    except:
+        raise Http404
+
+    if not obj.is_parent:
+        obj = obj.parent
+
     initial_data = {
         "content_type": obj.content_type,
         "object_id": obj.object_id,

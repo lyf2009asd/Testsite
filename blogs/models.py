@@ -9,6 +9,7 @@ from markdown_deux import markdown
 from django.utils.safestring import mark_safe
 from comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
+from .utils import count_time
 # Create your models here.
 
 
@@ -24,7 +25,7 @@ def upload_location(instance, filename):
 class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
     title = models.CharField(max_length=120)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     image = models.ImageField(upload_to=upload_location,
         null=True, blank=True, width_field="width_field", height_field="height_field")
     height_field = models.IntegerField(default=0)
@@ -32,6 +33,7 @@ class Post(models.Model):
     content = models.TextField()
     draft = models.BooleanField(default=False)
     publish = models.DateField(auto_now=False, auto_now_add= False)
+    read_time = models.TimeField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
 
@@ -78,5 +80,9 @@ def create_slug(instance, new_slug=None):
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
+    if instance.content:
+        html_string = instance.get_markdown()
+        read_time = count_time(html_string)
+        instance.read_time = read_time
 
 pre_save.connect(pre_save_post_receiver, sender=Post)
