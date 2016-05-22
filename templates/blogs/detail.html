@@ -32,7 +32,7 @@
                                     {% for child_comment in comment.children %}
                                 <blockquote>
                                   <p>{{ child_comment.content }}</p>
-                                  <footer>by {{ comment.user }} | {{ comment.timestamp|timesince }} ago</footer>
+                                  <footer>by {{ child_comment.user }} | {{ child_comment.timestamp|timesince }} ago</footer>
                                 </blockquote>
                                     {% endfor %}
                                     {% if request.user.is_authenticated %}
