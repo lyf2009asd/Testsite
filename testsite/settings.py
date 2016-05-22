@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     #my own app
     'blogs',
     'newsletter',
+    'comments',
 
 ]
 

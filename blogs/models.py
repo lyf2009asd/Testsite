@@ -7,6 +7,8 @@ from django.conf import settings
 from django.utils import timezone
 from markdown_deux import markdown
 from django.utils.safestring import mark_safe
+from comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 # Create your models here.
 
 
@@ -42,7 +44,7 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("posts_detail", kwargs={"slug": self.slug})
+        return reverse("posts_detail", kwargs={"id": self.id})
 
     class Meta:
         ordering = ["-timestamp", "-updated"]
@@ -50,6 +52,17 @@ class Post(models.Model):
     def get_markdown(self):
         content = self.content
         return  mark_safe(markdown(content))
+
+    @property
+    def comments(self):
+        instance = self
+        qs = Comment.objects.filter_by_instance(instance)
+        return qs
+    @property
+    def get_content_type(self):
+        instance = self
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        return content_type
 
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)
