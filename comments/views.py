@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import Comment
 from .forms import CommentForm
 from django.http import HttpResponseRedirect, Http404, HttpResponse
@@ -6,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 # Create your views here.
 
-
+@login_required(login_url="/accounts/login/")
 def comment_delete(request, id):
     # obj = get_object_or_404(Comment, id=id)
     try:
@@ -43,7 +44,7 @@ def comment_thread(request, id):
         "object_id": obj.object_id,
     }
     comment_form = CommentForm(request.POST or None, initial=initial_data)
-    if comment_form.is_valid():
+    if comment_form.is_valid() and request.user.is_authenticated():
         c_type = comment_form.cleaned_data.get("content_type")
         content_type = ContentType.objects.get(model=c_type)
         obj_id = comment_form.cleaned_data.get("object_id")
